@@ -3,7 +3,6 @@ Enable bitwise operators on scoped enums.
 
 Library compiles with no warnings (`-std=c++17 -Wall -Wshadow -Wextra -Wnon-virtual-dtor -pedantic`) on Clang 14.
 
-
 ## Example usage
 
 ```cpp
@@ -31,5 +30,6 @@ auto main() -> int
     std::cout << (b ? "true" : "false");
     
     e = TestEnum::Foo | TestEnum::Baz;
+    return 0;
 }
 ```

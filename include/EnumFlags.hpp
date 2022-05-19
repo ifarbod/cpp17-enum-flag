@@ -32,8 +32,8 @@ struct HasIsFlags<T, std::void_t<decltype(EnumFlags<T>::is_flags)>>
 {
 };
 
-template <typename T, typename U = std::underlying_type_t<T>>
-constexpr bool IsFlagsEnum()
+template <typename T>
+constexpr auto IsFlagsEnum() -> bool
 {
     if constexpr (HasIsFlags<T>::value)
     {
@@ -53,63 +53,51 @@ constexpr auto EnumIsSet(T e) -> std::enable_if_t<std::is_enum_v<T> && zsl::IsFl
 
 }  // namespace zsl
 
-template <typename T>
-constexpr auto operator&(T lhs, T rhs) -> std::enable_if_t<std::is_enum_v<T> && zsl::IsFlagsV<T>, T>
+template <typename T, std::enable_if_t<std::is_enum_v<T> && zsl::IsFlagsV<T>, int> = 0>
+constexpr auto operator&(T lhs, T rhs) -> T
 {
     using UnderlyingType = std::underlying_type_t<T>;
     return static_cast<T>(static_cast<UnderlyingType>(lhs) & static_cast<UnderlyingType>(rhs));
 }
 
-template <typename T>
-constexpr auto operator|(T lhs, T rhs) -> std::enable_if_t<std::is_enum_v<T> && zsl::IsFlagsV<T>, T>
+template <typename T, std::enable_if_t<std::is_enum_v<T> && zsl::IsFlagsV<T>, int> = 0>
+constexpr auto operator|(T lhs, T rhs) -> T
 {
     using UnderlyingType = std::underlying_type_t<T>;
     return static_cast<T>(static_cast<UnderlyingType>(lhs) | static_cast<UnderlyingType>(rhs));
 }
 
-template <typename T>
-constexpr auto operator^(T lhs, T rhs) -> std::enable_if_t<std::is_enum_v<T> && zsl::IsFlagsV<T>, T>
+template <typename T, std::enable_if_t<std::is_enum_v<T> && zsl::IsFlagsV<T>, int> = 0>
+constexpr auto operator^(T lhs, T rhs) -> T
 {
     using UnderlyingType = std::underlying_type_t<T>;
     return static_cast<T>(static_cast<UnderlyingType>(lhs) | static_cast<UnderlyingType>(rhs));
 }
 
-template <typename T>
-constexpr auto operator~(T lhs) -> std::enable_if_t<std::is_enum_v<T> && zsl::IsFlagsV<T>, T>
+template <typename T, std::enable_if_t<std::is_enum_v<T> && zsl::IsFlagsV<T>, int> = 0>
+constexpr auto operator~(T lhs) -> T
 {
     using UnderlyingType = std::underlying_type_t<T>;
     return static_cast<T>(~static_cast<UnderlyingType>(lhs));
 }
 
-template <typename T>
-constexpr auto operator&=(T lhs, T rhs) -> std::enable_if_t<std::is_enum_v<T> && zsl::IsFlagsV<T>, T>
+template <typename T, std::enable_if_t<std::is_enum_v<T> && zsl::IsFlagsV<T>, int> = 0>
+constexpr auto operator&=(T lhs, T rhs) -> T
 {
     using UnderlyingType = std::underlying_type_t<T>;
     return lhs = static_cast<T>(static_cast<UnderlyingType>(lhs) & static_cast<UnderlyingType>(rhs));
 }
 
-template <typename T>
-constexpr auto operator|=(T lhs, T rhs) -> std::enable_if_t<std::is_enum_v<T> && zsl::IsFlagsV<T>, T>
+template <typename T, std::enable_if_t<std::is_enum_v<T> && zsl::IsFlagsV<T>, int> = 0>
+constexpr auto operator|=(T lhs, T rhs) -> T
 {
     using UnderlyingType = std::underlying_type_t<T>;
     return lhs = static_cast<T>(static_cast<UnderlyingType>(lhs) | static_cast<UnderlyingType>(rhs));
 }
 
-template <typename T>
-constexpr auto operator^=(T lhs, T rhs) -> std::enable_if_t<std::is_enum_v<T> && zsl::IsFlagsV<T>, T>
+template <typename T, std::enable_if_t<std::is_enum_v<T> && zsl::IsFlagsV<T>, int> = 0>
+constexpr auto operator^=(T lhs, T rhs) -> T
 {
     using UnderlyingType = std::underlying_type_t<T>;
     return lhs = static_cast<T>(static_cast<UnderlyingType>(lhs) ^ static_cast<UnderlyingType>(rhs));
-}
-
-template <typename T>
-constexpr auto operator==(T lhs, T rhs) -> std::enable_if_t<std::is_enum_v<T> && zsl::IsFlagsV<T>, bool>
-{
-    return lhs == rhs;
-}
-
-template <typename T>
-constexpr auto operator!=(T lhs, T rhs) -> std::enable_if_t<std::is_enum_v<T> && zsl::IsFlagsV<T>, bool>
-{
-    return lhs != rhs;
 }
